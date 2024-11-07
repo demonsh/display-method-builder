@@ -1,6 +1,7 @@
 <script setup>
-
 import { ref } from 'vue';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 defineOptions({
   name: 'IndexPage',
@@ -23,6 +24,7 @@ const data = ref({
 const uploadImage = ref(null);
 const uploadImageCard = ref(null);
 const cardStyle = ref({});
+
 async function upload(img) {
   if (!img) {
     uploadImage.value = img;
@@ -32,6 +34,7 @@ async function upload(img) {
 
   return img;
 }
+
 function uploadCard(img) {
   if (!img) {
     uploadImageCard.value = img;
@@ -43,183 +46,229 @@ function uploadCard(img) {
   };
   return img;
 }
+const splitterModel = ref(50);
 </script>
 
 <template>
-  <div>
-    <div class="circles">
-      <div class="circle circle-1"></div>
-      <div class="circle circle-2"></div>
-    </div>
+  <q-splitter
+    style="height: 100vh"
+    v-model="splitterModel"
+  >
+    <template v-slot:before>
 
-    <div class="card-group">
-      <div class="card">
-        <div class="bg" :style="cardStyle"></div>
-        <div class="card-upload">
-          <q-btn icon="upload" round size="13px" color="black" />
-          <q-file
-            @update:model-value="uploadCard"
-            :model="uploadImageCard"
-            class="file-op"
-            label="Label"
-          />
+      <div class="q-px-lg wrap-json column justify-center">
+        <div class="json-pretty q-px-lg items-center">
+          <div class="title-main q-pb-xl">Preview</div>
+          <vue-json-pretty :data="data" /></div>
+      </div>
+      <div class="wrap-btn">
+        <q-btn outline label="Save" icon="save" padding="12px 30px" color="primary" />
+      </div>
+    </template>
+    <template v-slot:after>
+      <div>
+        <div class="circles">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
         </div>
-        <div class="edit color-description">
-          <q-btn rounded no-caps class="custom-btn" size="15px">
-            <span class="q-pr-sm">Description color</span>
-            <q-icon name="colorize" size="17px" />
-            <q-popup-edit v-model="data.descriptionTextColor" v-slot="scope">
-              <q-color v-model="data.descriptionTextColor" :model-value="scope.value"
-                       no-header no-footer class="my-picker" />
-            </q-popup-edit>
-          </q-btn>
-        </div>
-        <div class="edit color-issuer">
-          <q-btn rounded no-caps class="custom-btn" size="15px">
-            <span class="q-pr-sm">Issuer color</span>
-            <q-icon name="colorize" size="17px" />
-            <q-popup-edit v-model="data.issuerTextColor" v-slot="scope">
-              <q-color v-model="data.issuerTextColor" :model-value="scope.value"
-                       no-header no-footer class="my-picker" />
-            </q-popup-edit>
-          </q-btn>
-        </div>
-        <div class="edit text-issuer">
-          <q-btn rounded no-caps class="custom-btn" size="15px">
-            <span class="q-pr-sm">Issuer text</span>
-            <q-icon name="edit" class="edit-icon" size="17px" />
-            <q-popup-edit v-model="data.issuerName" style="width: 300px" v-slot="scope">
-              <q-input
-                autofocus
-                dense
-                v-model="scope.value"
-                :model-value="scope.value"
-                hint="Your nickname"
-              >
-                <template v-slot:after>
-                  <q-btn
-                    flat dense color="negative" icon="cancel"
-                    @click.stop.prevent="scope.cancel"
-                  />
-
-                  <q-btn
-                    flat
-                    dense
-                    color="positive"
-                    icon="check_circle"
-                    @click.stop.prevent="scope.set"
-
-                  />
-                </template>
-              </q-input>
-            </q-popup-edit>
-          </q-btn>
-        </div>
-        <div class="name cursor-pointer">
-          <span :style="{color: data.titleTextColor}">{{ data.title }}</span>
-          <div class="edit">
-            <q-btn rounded no-caps class="custom-btn" size="15px">
-              <span class="q-pr-sm text-black">Title</span>
-              <q-icon name="edit" color="black" class="edit-icon" size="17px" />
-            </q-btn>
-            <q-popup-edit v-model="data.title" style="width: 300px" v-slot="scope">
-              <q-input
-                autofocus
-                dense
-                v-model="scope.value"
-                :model-value="scope.value"
-                hint="Your nickname"
-              >
-                <template v-slot:after>
-                  <q-btn
-                    flat dense color="negative" icon="cancel"
-                    @click.stop.prevent="scope.cancel"
-                  />
-
-                  <q-btn
-                    flat
-                    dense
-                    color="positive"
-                    icon="check_circle"
-                    @click.stop.prevent="scope.set"
-
-                  />
-                </template>
-              </q-input>
-            </q-popup-edit>
-          </div>
-          <div class="edit color">
-            <q-btn rounded no-caps class="custom-btn" size="15px">
-              <span class="q-pr-sm text-black">Title color</span>
-              <q-icon name="colorize" color="black"  size="17px" />
-              <q-popup-edit v-model="data.titleTextColor" v-slot="scope">
-                <q-color v-model="data.titleTextColor" :model-value="scope.value"
-                         no-header no-footer class="my-picker" />
-              </q-popup-edit>
-            </q-btn>
-          </div>
-        </div>
-        <div class="description" style="max-width: 270px">
-          <span :style="{color: data.descriptionTextColor}">{{ data.description }}</span>
-          <div class="edit">
-            <q-btn rounded no-caps class="custom-btn" size="14px">
-              <span class="q-pr-sm text-black">Description</span>
-              <q-icon name="edit" color="black" class="edit-icon" size="17px" />
-            </q-btn>
-            <q-popup-edit v-model="data.description" style="width: 300px" v-slot="scope">
-              <q-input
-                autofocus
-                dense
-                v-model="scope.value"
-                :model-value="scope.value"
-                hint="Your nickname"
-              >
-                <template v-slot:after>
-                  <q-btn
-                    flat dense color="negative" icon="cancel"
-                    @click.stop.prevent="scope.cancel"
-                  />
-
-                  <q-btn
-                    flat
-                    dense
-                    color="positive"
-                    icon="check_circle"
-                    @click.stop.prevent="scope.set"
-
-                  />
-                </template>
-              </q-input>
-            </q-popup-edit>
-          </div>
-        </div>
-        <div class="logo-url">
-          <q-avatar size="38px" class="custom-avatar">
-            <div class="upload">
+        <div class="card-group">
+          <div class="card">
+            <div class="bg" :style="cardStyle"></div>
+            <div class="card-upload">
               <q-btn icon="upload" round size="13px" color="black" />
               <q-file
-                @update:model-value="upload"
-                :model="uploadImage"
+                @update:model-value="uploadCard"
+                :model="uploadImageCard"
                 class="file-op"
                 label="Label"
               />
             </div>
-            <img :src="uploadImage || 'https://cdn.quasar.dev/img/boy-avatar.png'">
-          </q-avatar>
-        </div>
-        <div class="issuerName">
-          <span :style="{color: data.issuerTextColor}">{{ data.issuerName }}</span>
+            <div class="edit color-description">
+              <q-btn rounded no-caps class="custom-btn" size="15px">
+                <span class="q-pr-sm">Description color</span>
+                <q-icon name="colorize" size="17px" />
+                <q-popup-edit v-model="data.descriptionTextColor" v-slot="scope">
+                  <q-color v-model="data.descriptionTextColor" :model-value="scope.value"
+                           no-header no-footer class="my-picker" />
+                </q-popup-edit>
+              </q-btn>
+            </div>
+            <div class="edit color-issuer">
+              <q-btn rounded no-caps class="custom-btn" size="15px">
+                <span class="q-pr-sm">Issuer color</span>
+                <q-icon name="colorize" size="17px" />
+                <q-popup-edit v-model="data.issuerTextColor" v-slot="scope">
+                  <q-color v-model="data.issuerTextColor" :model-value="scope.value"
+                           no-header no-footer class="my-picker" />
+                </q-popup-edit>
+              </q-btn>
+            </div>
+            <div class="edit text-issuer">
+              <q-btn rounded no-caps class="custom-btn" size="15px">
+                <span class="q-pr-sm">Issuer text</span>
+                <q-icon name="edit" class="edit-icon" size="17px" />
+                <q-popup-edit v-model="data.issuerName" style="width: 300px" v-slot="scope">
+                  <q-input
+                    autofocus
+                    dense
+                    v-model="scope.value"
+                    :model-value="scope.value"
+                    hint="Your nickname"
+                  >
+                    <template v-slot:after>
+                      <q-btn
+                        flat dense color="negative" icon="cancel"
+                        @click.stop.prevent="scope.cancel"
+                      />
 
-        </div>
-        <div class="wrap-ring">
-          <div class="ring"></div>
+                      <q-btn
+                        flat
+                        dense
+                        color="positive"
+                        icon="check_circle"
+                        @click.stop.prevent="scope.set"
+
+                      />
+                    </template>
+                  </q-input>
+                </q-popup-edit>
+              </q-btn>
+            </div>
+            <div class="name cursor-pointer">
+              <span :style="{color: data.titleTextColor}">{{ data.title }}</span>
+              <div class="edit">
+                <q-btn rounded no-caps class="custom-btn" size="15px">
+                  <span class="q-pr-sm text-black">Title</span>
+                  <q-icon name="edit" color="black" class="edit-icon" size="17px" />
+                </q-btn>
+                <q-popup-edit v-model="data.title" style="width: 300px" v-slot="scope">
+                  <q-input
+                    autofocus
+                    dense
+                    v-model="scope.value"
+                    :model-value="scope.value"
+                    hint="Your nickname"
+                  >
+                    <template v-slot:after>
+                      <q-btn
+                        flat dense color="negative" icon="cancel"
+                        @click.stop.prevent="scope.cancel"
+                      />
+
+                      <q-btn
+                        flat
+                        dense
+                        color="positive"
+                        icon="check_circle"
+                        @click.stop.prevent="scope.set"
+
+                      />
+                    </template>
+                  </q-input>
+                </q-popup-edit>
+              </div>
+              <div class="edit color">
+                <q-btn rounded no-caps class="custom-btn" size="15px">
+                  <span class="q-pr-sm text-black">Title color</span>
+                  <q-icon name="colorize" color="black" size="17px" />
+                  <q-popup-edit v-model="data.titleTextColor" v-slot="scope">
+                    <q-color v-model="data.titleTextColor" :model-value="scope.value"
+                             no-header no-footer class="my-picker" />
+                  </q-popup-edit>
+                </q-btn>
+              </div>
+            </div>
+            <div class="description" style="max-width: 270px">
+              <span :style="{color: data.descriptionTextColor}">{{ data.description }}</span>
+              <div class="edit">
+                <q-btn rounded no-caps class="custom-btn" size="14px">
+                  <span class="q-pr-sm text-black">Description</span>
+                  <q-icon name="edit" color="black" class="edit-icon" size="17px" />
+                </q-btn>
+                <q-popup-edit v-model="data.description" style="width: 300px" v-slot="scope">
+                  <q-input
+                    autofocus
+                    dense
+                    v-model="scope.value"
+                    :model-value="scope.value"
+                    hint="Your nickname"
+                  >
+                    <template v-slot:after>
+                      <q-btn
+                        flat dense color="negative" icon="cancel"
+                        @click.stop.prevent="scope.cancel"
+                      />
+
+                      <q-btn
+                        flat
+                        dense
+                        color="positive"
+                        icon="check_circle"
+                        @click.stop.prevent="scope.set"
+
+                      />
+                    </template>
+                  </q-input>
+                </q-popup-edit>
+              </div>
+            </div>
+            <div class="logo-url">
+              <q-avatar size="38px" class="custom-avatar">
+                <div class="upload">
+                  <q-btn icon="upload" round size="13px" color="black" />
+                  <q-file
+                    @update:model-value="upload"
+                    :model="uploadImage"
+                    class="file-op"
+                    label="Label"
+                  />
+                </div>
+                <img :src="uploadImage || 'https://cdn.quasar.dev/img/boy-avatar.png'">
+              </q-avatar>
+            </div>
+            <div class="issuerName">
+              <span :style="{color: data.issuerTextColor}">{{ data.issuerName }}</span>
+
+            </div>
+            <div class="wrap-ring">
+              <div class="ring"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </q-splitter>
 </template>
+<style lang="scss">
+  .wrap-json {
+    background-color: #f2f4f7;
+    border-radius: 5px;
+    font-size: 12px;
+    overflow: auto;
+    padding: 1em;
+    width: 100%;
+    height: 100%;
+    .json-pretty {
 
+    }
+  }
+  .vjs-tree {
+    font-size: 12px;
+  }
+  .vjs-value-string {
+    color: rgb(0, 128, 0) !important;
+  }
+  </style>
 <style scoped lang="scss">
+  .wrap-btn {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+  .title-main {
+    font-size: 18px;
+  }
   .wrap-ring {
     width: 100%;
     height: 100%;
@@ -228,6 +277,7 @@ function uploadCard(img) {
     left: 0;
     overflow: hidden;
   }
+
   .bg {
     position: absolute;
     top: 0;
@@ -241,6 +291,7 @@ function uploadCard(img) {
     background-size: cover;
     filter: brightness(.8);
   }
+
   .file-op {
     position: absolute;
     top: 0;
@@ -250,6 +301,7 @@ function uploadCard(img) {
     z-index: 10;
     opacity: 0;
   }
+
   .card-upload {
     position: absolute;
     top: 54%;
@@ -258,6 +310,7 @@ function uploadCard(img) {
     opacity: .7;
     z-index: 100;
   }
+
   .custom-btn {
     background-color: #9afe5b;
     border-radius: 6px;
@@ -265,6 +318,7 @@ function uploadCard(img) {
     position: relative;
     box-shadow: 0 0 0 2px #7aaa78;
   }
+
   .edit {
     position: absolute;
     z-index: 100;
@@ -276,9 +330,11 @@ function uploadCard(img) {
       left: 0;
       background: #000;
     }
+
     &.text-issuer {
       bottom: -60px;
       left: 70px;
+
       &:after {
         top: -61px;
         left: 61px;
@@ -324,15 +380,18 @@ function uploadCard(img) {
     left: 20px;
     box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.6);
     border-radius: 50%;
+
     .custom-avatar {
       position: relative;
       overflow: hidden;
+
       &:hover {
         .upload {
           opacity: .6;
           visibility: visible;
         }
       }
+
       .upload {
         opacity: 0;
         position: absolute;
@@ -352,6 +411,7 @@ function uploadCard(img) {
     left: 75px;
     color: rgba(255, 255, 255, 1);
     font-size: 17px;
+
     &:after {
       content: '';
       position: absolute;
@@ -379,6 +439,7 @@ function uploadCard(img) {
       }
     }
   }
+
   .color-issuer, .color-description {
     right: -180px;
     top: 76px;
@@ -390,10 +451,12 @@ function uploadCard(img) {
       height: 1px;
     }
   }
+
   .color-issuer {
     top: inherit;
     bottom: 37px;
     right: -146px;
+
     &:after {
       display: none;
     }
