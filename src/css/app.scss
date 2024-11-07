@@ -1,0 +1,113 @@
+// app global css in SCSS form
+:root {
+  font-size: 24px;
+}
+
+body {
+  //background: #ddf6d0;
+  /* fallback for old browsers */
+  background: #ffffff;
+  height: 100vh;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+/* Background circles start */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(#e1ffd0, rgb(55 132 86 / 37%));
+}
+.circles {
+  position: absolute;
+  height: 270px;
+  width: 450px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.circle-1 {
+  height: 180px;
+  width: 180px;
+  top: -50px;
+  left: -60px;
+}
+.circle-2 {
+  height: 200px;
+  width: 200px;
+  bottom: -90px;
+  right: -90px;
+  opacity: 0.8;
+}
+/* Background circles end */
+
+.card-group {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card {
+  position: relative;
+  height: 270px;
+  width: 450px;
+  border-radius: 25px;
+  background: rgb(154 254 91 / 25%);
+  backdrop-filter: blur(30px);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 80px rgb(154 254 91 / 15%);
+  //overflow: hidden;
+  z-index: 12121;
+}
+
+.description,
+.number,
+.name,
+.from,
+.to,
+.ring {
+  position: absolute; /* All items inside card should have absolute position */
+}
+
+.logo img {
+  top: 35px;
+  right: 40px;
+  width: 80px;
+  height: auto;
+  opacity: 0.8;
+}
+
+.chip img {
+  top: 120px;
+  left: 40px;
+  width: 50px;
+  height: auto;
+  opacity: 0.8;
+}
+
+
+/* The two rings on the card background */
+.ring {
+  height: 500px;
+  width: 500px;
+  border-radius: 50%;
+  background: transparent;
+  border: 50px solid rgba(0, 0, 0, 0.1);
+  bottom: -250px;
+  right: -250px;
+  box-sizing: border-box;
+}
+
+.ring::after {
+  content: "";
+  position: absolute;
+  height: 600px;
+  width: 600px;
+  border-radius: 50%;
+  background: transparent;
+  border: 30px solid rgba(0, 0, 0, 0.1);
+  bottom: -80px;
+  right: -110px;
+  box-sizing: border-box;
+  z-index: 1;
+}
