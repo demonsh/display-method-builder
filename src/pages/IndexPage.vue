@@ -62,7 +62,7 @@ const splitterModel = ref(50);
           <vue-json-pretty :data="data" /></div>
       </div>
       <div class="wrap-btn">
-        <q-btn outline label="Save" icon="save" padding="12px 30px" color="primary" />
+        <q-btn outline label="Save" icon="save" padding="12px 30px" color="black" />
       </div>
     </template>
     <template v-slot:after>
